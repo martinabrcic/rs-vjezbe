@@ -8,6 +8,12 @@ class Student:
         self.godine = godine
         self.ocjene = ocjene
 
+    def prosjek(self):
+        if self.ocjene:
+            return sum(self.ocjene) / len(self.ocjene)
+        else:
+            return 0
+
 studenti = [
     {"ime": "Ivan", "prezime": "Ivić", "godine": 19, "ocjene": [5, 4, 3, 5, 2]},
     {"ime": "Marko", "prezime": "Marković", "godine": 22, "ocjene": [3, 4, 5, 2, 3]},
@@ -24,4 +30,7 @@ for student in studenti:
     studenti_objekti.append(novi_student)
 
 for student in studenti_objekti:
-    print(f"Student: {student.ime} {student.prezime}, Godine: {student.godine}, ocjene: {student.ocjene}")
+    print(f"Student: {student.ime} {student.prezime}, Godine: {student.godine}, ocjene: {student.ocjene}, prosjek: {student.prosjek()}")
+
+najbolji_student = max(studenti_objekti, key=lambda student: student.prosjek())
+print(f"Najbolji student je: {najbolji_student.ime} {najbolji_student.prezime}, Prosjek: {najbolji_student.prosjek()}")
