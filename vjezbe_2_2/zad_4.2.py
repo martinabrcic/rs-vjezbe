@@ -30,7 +30,7 @@ class Kalkulator:
 
         return korijen_a, korijen_b
 
-izracun = Kalkulator(2, 3)
+izracun = Kalkulator(2, 0)
 
 print(izracun.zbroj())
 print(izracun.oduzimanje())
