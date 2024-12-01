@@ -14,36 +14,35 @@ baza_lozinka = [
   {'korisnicko_ime': 'zdeslav032', 'lozinka': 'deso123'}
 ]
 
-async def autentifikacija(rjecnik, korisnicko_ime, email, lozinka):
+async def autentifikacija(korisnik):
     await asyncio.sleep(3)
 
-    korisnicka_imena = [korisnik["korisnicko_ime"] for korisnik in rjecnik]
-    emailovi = [korisnik["email"] for korisnik in rjecnik]
-
-    if korisnicko_ime in korisnicka_imena and email in emailovi:
-        print(f"Korisnik {korisnicko_ime} je u bazi")
-        await autorizacija(baza_lozinka, lozinka)
-    else:
-        print(f"Korisnik {korisnicko_ime} nije u bazi")
-    
-    return lozinka
+    for user in baza_korisnika:
+        if user["korisnicko_ime"] == korisnik["korisnicko_ime"] and user["email"] == korisnik["email"]:
+            return await autorizacija(user, korisnik["lozinka"])
+        else:
+            return f"Korisnik {korisnik} nije pronađen."
     
 
-async def autorizacija(rjecnik, lozinka):
+async def autorizacija(korisnik, lozinka):
     await asyncio.sleep(2)
-    lozinke = [korisnik["lozinka"] for korisnik in rjecnik]
-
-    if lozinka in lozinke:
-        print("Autorizacija uspješna")
-    else:
-       print("Autorizacija neuspješna")
     
-    return lozinka
+    for user in baza_lozinka:
+        if user["korisnicko_ime"] == korisnik["korisnicko_ime"]:
+            if user["lozinka"] == lozinka:
+                return f"Korisnik {korisnik["korisnicko_ime"]}: se uspješno autorizirao."
+            else:
+                return f"Korisnik {korisnik["korisnicko_ime"]}: autorizacija nije bila uspješna."
+    
+    return f"Korisnik {korisnik['korisnicko_ime']} nije pronađen."
 
 async def main():
     
-    await autentifikacija(baza_korisnika, "mirko123", "mirko123@gmail.com", "lozinka123")
-    await autentifikacija(baza_korisnika, "mirko123", "mirko123@gmail.com", "lozinkaa123")
+    provjera_korisnika = { "korisnicko_ime": "ana_anic", "email": "aanic@gmail.com", "lozinka": "lozifffnka123"
+    }
+
+    provjera = await autentifikacija(provjera_korisnika)
+    print(provjera)
     
 asyncio.run(main())
 
