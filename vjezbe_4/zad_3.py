@@ -7,7 +7,6 @@ async def get_dog_fact(session):
     print("Dog fact response:", data)
     
     if 'data' in data:
-        
         dog_facts = [fact['attributes']['body'] for fact in data['data']]
         return dog_facts
     else:
@@ -22,13 +21,9 @@ async def get_cat_fact(session):
 
 async def mix_facts(lista1, lista2):
 
-    nova_lista = []
-    for dog_fact, cat_fact in zip(lista1, lista2):
-        if len(dog_fact['fact']) > len(cat_fact['fact']):
-            nova_lista.append(dog_fact["fact"])
-        else:
-            nova_lista.append(cat_fact["fact"])
-        return nova_lista
+    nova_lista = [dog_fact if len(dog_fact)>len(cat_fact) else cat_fact for dog_fact, cat_fact in zip(lista1,lista2)]
+    return nova_lista
+
 
 async def main():
     async with aiohttp.ClientSession() as session:
@@ -46,6 +41,7 @@ async def main():
         print()
 
         mixed_facts = await mix_facts(dog_list, cat_list)
-        print(mixed_facts)
+        for fact in mixed_facts:
+            print(fact)
 
 asyncio.run(main())
