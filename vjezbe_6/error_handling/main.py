@@ -1,5 +1,5 @@
 from fastapi import FastAPI, HTTPException
-from models import Automobil
+from models import Automobil, CreateAutomobil
 
 automobili = [
   {"id": 1, "marka": "Audi", "model":"A4", "godina_proizvodnje": 2016, "cijena": 20000, "boja": "srebrna"},
@@ -16,3 +16,24 @@ def dohvati_automobil(id: int):
     if auto["id"] == id:
       return auto 
   raise HTTPException(status_code=404, detail="Auto nije pronađen")
+
+@app.post("/automobili", response_model=CreateAutomobil)
+def kreiraj_automobil(novi_auto: CreateAutomobil):
+  
+  if any(auto["marka"] == novi_auto.marka and auto["model"] == novi_auto.model and auto["godina_proizvodnje"] == novi_auto.godina_proizvodnje for auto in automobili):
+    raise HTTPException(status_code=400, detail="Auto s tim ID već postoji")
+  
+  auto_id = max([auto["id"] for auto in automobili]) + 1
+  cijena_pdv = novi_auto.cijena * 1.25
+  
+  novi_auto_def = {
+    "id": auto_id,
+    "marka": novi_auto.marka,
+    "model": novi_auto.model,
+    "godina_proizvodnje": novi_auto.godina_proizvodnje,
+    "cijena": novi_auto.cijena,
+    "cijena_pdv": cijena_pdv,
+    "boja": novi_auto.boja
+  }
+  automobili.append(novi_auto_def)
+  return novi_auto_def
