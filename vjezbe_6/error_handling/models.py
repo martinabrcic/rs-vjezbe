@@ -8,11 +8,5 @@ class Automobil(BaseModel):
     cijena: float
     boja: str
 
-class CreateAutomobil(BaseModel):
-    id: int
-    marka: str
-    model: str
-    godina_proizvodnje: int
-    cijena: float
+class CreateAutomobil(Automobil):
     cijena_pdv: float
-    boja: str

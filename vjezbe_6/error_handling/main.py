@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from models import Automobil, CreateAutomobil
 
 automobili = [
@@ -16,6 +16,27 @@ def dohvati_automobil(id: int):
     if auto["id"] == id:
       return auto 
   raise HTTPException(status_code=404, detail="Auto nije pronađen")
+
+@app.get("/automobili")
+def dohvati_automobile(min_cijena: int = Query(0, ge=1),
+                        max_cijena: int = Query(None, ge=1),
+                        min_godina: int = Query(1960, ge=1960),
+                        max_godina: int = Query(None, ge=1960)
+                       ):
+  if max_cijena is not None and min_cijena > max_cijena:
+        raise HTTPException(status_code=400, detail="Minimalna cijena ne može biti veća od maksimalne cijene.")
+  if max_godina is not None and min_godina > max_godina:
+        raise HTTPException(status_code=400, detail="Minimalna godina ne može biti veća od maksimalne godine.")
+
+  filtrirani_automobili = [auto for auto in automobili if 
+        (min_cijena is None or auto["cijena"] >= min_cijena) and
+        (max_cijena is None or auto["cijena"] <= max_cijena) and
+        (min_godina is None or auto["godina_proizvodnje"] >= min_godina) and
+        (max_godina is None or auto["godina_proizvodnje"] <= max_godina)
+    ]
+
+  return filtrirani_automobili
+
 
 @app.post("/automobili", response_model=CreateAutomobil)
 def kreiraj_automobil(novi_auto: CreateAutomobil):
@@ -37,3 +58,4 @@ def kreiraj_automobil(novi_auto: CreateAutomobil):
   }
   automobili.append(novi_auto_def)
   return novi_auto_def
+
