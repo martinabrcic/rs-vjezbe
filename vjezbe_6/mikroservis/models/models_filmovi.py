@@ -43,9 +43,9 @@ class Movie(BaseModel):
             year_int = int(year[:4])
             if year_int <= 1900:
                 raise ValueError(f"Year must be greater than 1900, got {year_int}")
+            return year
         else:
             raise ValueError(f"Year must start with a valid 4-digit number, got {year}")
-        return year
 
     @field_validator('Runtime', mode='before')
     def validate_runtime(cls, runtime):
