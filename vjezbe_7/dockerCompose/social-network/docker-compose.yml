@@ -1,0 +1,20 @@
+services:
+  auth-api:
+    build: ./auth-api
+    container_name: auth-api
+    ports:
+      - "9000:9000"
+    networks:
+      - interna_mreza
+
+  social-api:
+    build: ./social-api
+    container_name: social-api
+    ports:
+      - "3500:3500"
+    networks:
+      - interna_mreza
+
+networks:
+  interna_mreza:
+    driver: bridge

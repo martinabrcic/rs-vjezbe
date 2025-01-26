@@ -44,3 +44,10 @@ async def provjeri_korisnika(korisnik: Korisnik):
 @app.get("/users", response_model=List[dict])
 async def get_all_users():
     return korisnici
+
+@app.post("/dummy_login")
+async def dummy_login(korisnik: Korisnik) -> bool:
+    for k in korisnici:
+        if k["korisnicko_ime"] == korisnik.korisnicko_ime and k["lozinka_hash"] == hash_data(korisnik.lozinka):
+            return True
+    return False
