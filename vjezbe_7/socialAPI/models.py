@@ -1,12 +1,12 @@
 from pydantic import BaseModel, Field
-from datetime import timestamp
+import datetime
 
 class Objava(BaseModel):
     id: int
-    korisnik: str = Field(ge=0, le=20)
-    teks: str = Field(ge=0, le=280)
-    vrijeme: timestamp
+    korisnik: str = Field()
+    tekst: str = Field()
+    vrijeme: datetime.datetime
 
 class CreateObjava(BaseModel):
-    korisnik: str = Field(ge=0, le=20)
-    teks: str = Field(ge=0, le=280)
+    korisnik: str = Field()
+    tekst: str = Field()
